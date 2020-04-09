@@ -50,6 +50,13 @@ Alu::Mantisa Alu::decToBinary(float num){
         contPartFrac++;
     }
 
+     if((contPartEntera+contPartFrac) < 23){
+
+         while((contPartEntera+contPartFrac) <=23){
+             parteFraccString += "0";
+             contPartFrac++;
+         }
+     }
      parteFraccString = regex_replace(parteFraccString, std::regex(R"([\D])"), "");
      mantisa.parteFraccionaria = parteFraccString;
      return mantisa;
