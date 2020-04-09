@@ -22,28 +22,36 @@ MainWindow::~MainWindow()
 void MainWindow::on_boton_suma_pressed()
 {
 
-    float resultado = this->alu.suma(0,0);
+    Alu::NumSolucion resultado = this->alu.suma(6.3,0);
 
     /*Ejemplo de resultado*/
-    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));
+    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado.numDec)));
+
+    //Por ahora solo pasa a binario
+    ui->resultado_IEEE->setText(QString::fromStdString(to_string(resultado.numIEEE.mantisa.parteEntera)+", "+to_string(resultado.numIEEE.mantisa.parteFraccionaria)));
+
+    ui->resultado_hex->setText(QString::fromStdString(to_string(resultado.numHex)));
 }
 
 void MainWindow::on_boton_producto_pressed()
 {
 
-    float resultado = this->alu.producto(0,0);
+    Alu::NumSolucion resultado = this->alu.suma(0,0);
 
     /*Ejemplo de resultado*/
-    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));
+    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado.numDec)));
+    ui->resultado_IEEE->setText(QString::fromStdString(to_string(resultado.numIEEE.mantisa.parteEntera)+to_string(resultado.numIEEE.mantisa.parteFraccionaria)));
+    ui->resultado_hex->setText(QString::fromStdString(to_string(resultado.numHex)));
 }
 
 
 void MainWindow::on_boton_division_pressed()
 {
 
-    float resultado = this->alu.division(0,0);
+    Alu::NumSolucion resultado = this->alu.suma(0,0);
 
     /*Ejemplo de resultado*/
-    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));
-
+    ui->resultado_dec->setText(QString::fromStdString(to_string(resultado.numDec)));
+    ui->resultado_IEEE->setText(QString::fromStdString(to_string(resultado.numIEEE.mantisa.parteEntera)+to_string(resultado.numIEEE.mantisa.parteFraccionaria)));
+    ui->resultado_hex->setText(QString::fromStdString(to_string(resultado.numHex)));
 }
