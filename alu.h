@@ -1,7 +1,7 @@
 #ifndef ALU_H
 #define ALU_H
 
-#include <iostream>
+#include <string>
 
 class Alu
 {
@@ -9,10 +9,10 @@ public:
 
     struct Mantisa{
         unsigned long long parteEntera;
-        unsigned long long parteFraccionaria;
+        std::string parteFraccionaria; //Seria un long long pero pierde ceros a la izquierda, trabajar con stoull
     };
     struct IEEE754num{
-        Mantisa mantisa;
+       Mantisa mantisa;
        unsigned long long exponente : 8;
        unsigned int signo: 1;
     };

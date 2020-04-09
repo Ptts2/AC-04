@@ -51,10 +51,23 @@ Alu::Mantisa Alu::decToBinary(float num){
     }
 
      parteFraccString = regex_replace(parteFraccString, std::regex(R"([\D])"), "");
-     mantisa.parteFraccionaria = stoull(parteFraccString);
+     mantisa.parteFraccionaria = parteFraccString;
      return mantisa;
 
 }
+
+Alu::IEEE754num Alu::fromDecToIEEE754(float num){
+
+    IEEE754num numeroConvertido;
+
+    if(num<0)
+        numeroConvertido.signo=1;
+    else
+        numeroConvertido.signo=0;
+
+    return numeroConvertido;
+}
+
 
 float Alu::fromIEEE754ToDec(Alu::IEEE754num){
 
@@ -89,16 +102,5 @@ Alu::NumSolucion Alu::division(float operador1, float operador2)
     return solucion;
 }
 
-Alu::IEEE754num Alu::fromDecToIEEE754(float num){
-
-    IEEE754num numeroConvertido;
-
-    if(num<0)
-        numeroConvertido.signo=1;
-    else
-        numeroConvertido.signo=0;
-
-    return numeroConvertido;
-}
 
 
