@@ -2,6 +2,7 @@
 #include <cmath>
 #include <string>
 #include <regex>
+#include <iostream>
 
 using namespace std;
 Alu::Alu()
@@ -31,8 +32,9 @@ Alu::Mantisa Alu::decToBinary(float num){
     }
 
     reverse(parteEnteraString.begin(), parteEnteraString.end());
+
     parteEnteraString = regex_replace(parteEnteraString, std::regex(R"([\D])"), "");
-    mantisa.parteEntera = stoull(parteEnteraString);
+    mantisa.parteEntera = parteEnteraString;
 
     //Convertir la parte fraccionaria a binario
     string parteFraccString;
@@ -67,10 +69,30 @@ Alu::IEEE754num Alu::fromDecToIEEE754(float num){
 
     IEEE754num numeroConvertido;
 
-    if(num<0)
+
+    if(num<0){
         numeroConvertido.signo=1;
-    else
+        numeroConvertido.mantisa = decToBinary(-num);
+    }
+    else{
         numeroConvertido.signo=0;
+        numeroConvertido.mantisa = decToBinary(num);
+    }
+
+    std::cout << numeroConvertido.mantisa.parteEntera<<endl;
+    int exponente = 127 + (int)(numeroConvertido.mantisa.parteEntera.size()) -1;
+
+    while(numeroConvertido.mantisa.parteEntera.size()>1){
+
+        numeroConvertido.mantisa.parteFraccionaria.pop_back();
+
+        (numeroConvertido.mantisa.parteFraccionaria).insert(0, &numeroConvertido.mantisa.parteEntera.back());
+        numeroConvertido.mantisa.parteEntera.pop_back();
+    }
+
+    Mantisa mantisa2 = decToBinary(float(exponente));
+    numeroConvertido.exponente= mantisa2.parteEntera;
+
 
     return numeroConvertido;
 }

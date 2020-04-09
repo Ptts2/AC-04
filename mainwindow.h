@@ -21,8 +21,9 @@ private slots:
 
     void on_boton_producto_pressed();
 
-
     void on_boton_division_pressed();
+
+    void setIEEEOperands();
 
 private:
     Ui::MainWindow *ui;

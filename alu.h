@@ -8,12 +8,12 @@ class Alu
 public:
 
     struct Mantisa{
-        unsigned long long parteEntera;
+        std::string parteEntera;
         std::string parteFraccionaria; //Seria un long long pero pierde ceros a la izquierda, trabajar con stoull
     };
     struct IEEE754num{
        Mantisa mantisa;
-       unsigned long long exponente : 8;
+       std::string exponente;
        unsigned int signo: 1;
     };
     struct NumSolucion{
