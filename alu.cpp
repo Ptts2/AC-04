@@ -7,19 +7,19 @@ Alu::Alu()
 
 Alu::~Alu(){}
 
-float Alu::suma()
+float Alu::suma(float operador1, float operador2)
 {
 
     return 0.0;
 }
 
-float Alu::producto()
+float Alu::producto(float operador1, float operador2)
 {
 
     return 0.0;
 }
 
-float Alu::division()
+float Alu::division(float operador1, float operador2)
 {
 
     return 0.0;

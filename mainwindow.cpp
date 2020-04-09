@@ -22,7 +22,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_boton_suma_pressed()
 {
 
-    float resultado = this->alu.suma(/*operadores*/);
+    float resultado = this->alu.suma(0,0);
 
     /*Ejemplo de resultado*/
     ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));
@@ -31,7 +31,7 @@ void MainWindow::on_boton_suma_pressed()
 void MainWindow::on_boton_producto_pressed()
 {
 
-    float resultado = this->alu.producto(/*operadores*/);
+    float resultado = this->alu.producto(0,0);
 
     /*Ejemplo de resultado*/
     ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));
@@ -41,7 +41,7 @@ void MainWindow::on_boton_producto_pressed()
 void MainWindow::on_boton_division_pressed()
 {
 
-    float resultado = this->alu.division(/*operadores*/);
+    float resultado = this->alu.division(0,0);
 
     /*Ejemplo de resultado*/
     ui->resultado_dec->setText(QString::fromStdString(to_string(resultado)));

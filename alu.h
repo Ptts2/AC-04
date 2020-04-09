@@ -13,9 +13,9 @@ public:
     };
     Alu();
     ~Alu();
-    float suma(/*Ver que incluir*/);
-    float producto(/*Ver que incluir*/);
-    float division(/*Ver que incluir*/);
+    float suma(float operador1, float operador2);
+    float producto(float operador1, float operador2);
+    float division(float operador1, float operador2);
     IEEE754num fromDecToIEEE754(float num);
     float fromIEEE754ToDec(IEEE754num);
 
