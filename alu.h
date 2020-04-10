@@ -38,6 +38,7 @@ public:
     Code fromDecToIEEE754(float num);
     Binario decToBinaryIEEE(float num, int nBits = 23);
     Binario decToBinaryNormal(float num);
+    Binario complementoA2(Alu::Binario num);
 
 private:
 

@@ -44,7 +44,10 @@ void MainWindow::on_boton_suma_pressed()
 
     Alu::NumSolucion resultado = this->alu.suma(op1, op2);
 
-    ui->resultado_dec->setText( QString::fromStdString( alu.decToBinaryNormal(op1).parteEntera +" "+alu.decToBinaryNormal(op1).parteFraccionaria ));
+    Alu::Binario op1bin =alu.decToBinaryNormal(op1);
+    Alu::Binario compA2 = alu.complementoA2(op1bin);
+
+   ui->resultado_dec->setText( QString::fromStdString( compA2.parteEntera +" "+compA2.parteFraccionaria ));
 }
 
 void MainWindow::on_boton_producto_pressed()

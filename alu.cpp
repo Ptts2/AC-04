@@ -126,6 +126,47 @@ Alu::Binario Alu::decToBinaryNormal(float num){
 
 }
 
+Alu::Binario Alu::complementoA2(Alu::Binario num){
+
+   Alu::Binario binarioCompA2;
+
+
+   string binario = num.parteEntera+num.parteFraccionaria;
+   int posPrimer1 = binario.size()-1;
+   string binarioA2 ="";
+
+   cout << "Primero: " << binarioA2 << endl;
+   while( strncmp(&binario[posPrimer1], "1", 1) != 0 && posPrimer1 > 0){
+       binarioA2 += binario.at(posPrimer1);
+       posPrimer1--;
+   }
+
+   cout << "Segundo: " << binarioA2 << endl;
+
+   binarioA2 +="1";
+   int i = posPrimer1-1;
+
+   cout << "Tercero: " << binarioA2 << endl;
+   while(i>=0){
+
+       if( strncmp(&binario[i], "1", 1) == 0)
+           binarioA2 += "0";
+       else
+           binarioA2 += "1";
+
+       i--;
+   }
+
+
+   reverse(binarioA2.begin(), binarioA2.end());
+
+   cout << "Cuarto: " << binarioA2 << endl;
+   binarioCompA2.parteEntera = binarioA2.substr(0,num.parteEntera.size());
+   binarioCompA2.parteFraccionaria = binarioA2.substr(num.parteEntera.size());
+
+   return binarioCompA2;
+}
+
 Alu::Code Alu::fromDecToIEEE754(float num){
 
     Code a;
