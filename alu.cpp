@@ -12,10 +12,10 @@ Alu::Alu()
 
 Alu::~Alu(){}
 
-Alu::Mantisa Alu::decToBinary(float num){
+Alu::Binario Alu::decToBinary(float num){
 
 
-    Mantisa mantisa;
+    Binario mantisa;
     float parteEntera, parteFraccionaria;
 
     parteFraccionaria = modf(num, &parteEntera);
@@ -65,53 +65,18 @@ Alu::Mantisa Alu::decToBinary(float num){
 
 }
 
-Alu::IEEE754num Alu::fromDecToIEEE754(float num){
+Alu::Code Alu::fromDecToIEEE754(float num){
 
-    IEEE754num numeroConvertido;
+    Code a;
+    a.numero = num;
+    return a;
 
-
-    if(num<0){
-        numeroConvertido.signo=1;
-        numeroConvertido.mantisa = decToBinary(-num);
-    }
-    else{
-        numeroConvertido.signo=0;
-        numeroConvertido.mantisa = decToBinary(num);
-    }
-
-    std::cout << numeroConvertido.mantisa.parteEntera<<endl;
-    int exponente = 127 + (int)(numeroConvertido.mantisa.parteEntera.size()) -1;
-
-    while(numeroConvertido.mantisa.parteEntera.size()>1){
-
-        numeroConvertido.mantisa.parteFraccionaria.pop_back();
-
-        (numeroConvertido.mantisa.parteFraccionaria).insert(0, &numeroConvertido.mantisa.parteEntera.back());
-        numeroConvertido.mantisa.parteEntera.pop_back();
-    }
-
-    Mantisa mantisa2 = decToBinary(float(exponente));
-    numeroConvertido.exponente= mantisa2.parteEntera;
-
-
-    return numeroConvertido;
-}
-
-
-float Alu::fromIEEE754ToDec(Alu::IEEE754num){
-
-    return 0.0;
 }
 
 Alu::NumSolucion Alu::suma(float operador1, float operador2)
 {
 
     NumSolucion solucion;
-    Mantisa mantisa = decToBinary(operador1);
-    IEEE754num numero;
-    numero.mantisa = mantisa;
-    solucion.numIEEE = numero;
-
     return solucion;
 }
 
@@ -119,7 +84,6 @@ Alu::NumSolucion Alu::producto(float operador1, float operador2)
 {
 
     NumSolucion solucion;
-
     return solucion;
 }
 
@@ -127,7 +91,6 @@ Alu::NumSolucion Alu::division(float operador1, float operador2)
 {
 
     NumSolucion solucion;
-
     return solucion;
 }
 

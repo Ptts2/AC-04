@@ -7,18 +7,26 @@ class Alu
 {
 public:
 
-    struct Mantisa{
+    struct Binario{
         std::string parteEntera;
         std::string parteFraccionaria; //Seria un long long pero pierde ceros a la izquierda, trabajar con stoull
     };
-    struct IEEE754num{
-       Mantisa mantisa;
-       std::string exponente;
-       unsigned int signo: 1;
+
+    union Code {
+
+        struct{
+            unsigned int partFrac : 23;
+            unsigned int expo : 8;
+            unsigned int sign : 1;
+        }bitfield;
+
+        float numero;
+        unsigned int numerox;
     };
+
     struct NumSolucion{
         float numDec;
-        IEEE754num numIEEE;
+        Code numIEEE;
         int numHex;
     };
 
@@ -27,13 +35,13 @@ public:
     NumSolucion suma(float operador1, float operador2);
     NumSolucion producto(float operador1, float operador2);
     NumSolucion division(float operador1, float operador2);
-    IEEE754num fromDecToIEEE754(float num);
-    float fromIEEE754ToDec(IEEE754num);
+    Code fromDecToIEEE754(float num);
+    Binario decToBinary(float num);
 
 private:
 
-    Mantisa decToBinary(float num);
-    float binaryToDec(Mantisa bin);
+
+    float binaryToDec(Binario bin);
 
 };
 
