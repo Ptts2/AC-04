@@ -12,7 +12,7 @@ Alu::Alu()
 
 Alu::~Alu(){}
 
-Alu::Binario Alu::decToBinary(float num){
+Alu::Binario Alu::decToBinary(float num, int nBits){
 
 
     Binario mantisa;
@@ -40,7 +40,7 @@ Alu::Binario Alu::decToBinary(float num){
     string parteFraccString;
     int contPartFrac = 0;
 
-    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=23){
+    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=nBits){
 
         float parteEnteraDec;
         parteFraccionaria *=2;
@@ -52,15 +52,22 @@ Alu::Binario Alu::decToBinary(float num){
         contPartFrac++;
     }
 
-     if((contPartEntera+contPartFrac) < 23){
+     if((contPartEntera+contPartFrac) < nBits){
 
-         while((contPartEntera+contPartFrac) <=23){
+         while((contPartEntera+contPartFrac) <=nBits){
              parteFraccString += "0";
              contPartFrac++;
          }
      }
      parteFraccString = regex_replace(parteFraccString, std::regex(R"([\D])"), "");
      mantisa.parteFraccionaria = parteFraccString;
+
+
+
+     while((int)mantisa.parteEntera.size()<nBits){
+
+         mantisa.parteEntera.insert(0, "0");
+     }
      return mantisa;
 
 }
