@@ -36,7 +36,8 @@ public:
     NumSolucion producto(float operador1, float operador2);
     NumSolucion division(float operador1, float operador2);
     Code fromDecToIEEE754(float num);
-    Binario decToBinary(float num, int nBits = 23);
+    Binario decToBinaryIEEE(float num, int nBits = 23);
+    Binario decToBinaryNormal(float num);
 
 private:
 

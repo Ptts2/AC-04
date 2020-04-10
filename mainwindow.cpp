@@ -27,8 +27,8 @@ void MainWindow:: setIEEEOperands(){
     Alu::Code op1IEEE = alu.fromDecToIEEE754(op1);
     Alu::Code op2IEEE = alu.fromDecToIEEE754(op2);
 
-    ui->op1_IEEE->setText(QString::fromStdString(to_string( op1IEEE.bitfield.sign ) + " " + alu.decToBinary(op1IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinary( op1IEEE.bitfield.partFrac).parteEntera));
-    ui->op2_IEEE->setText(QString::fromStdString(to_string( op2IEEE.bitfield.sign ) + " " + alu.decToBinary(op2IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinary( op2IEEE.bitfield.partFrac).parteEntera));
+    ui->op1_IEEE->setText(QString::fromStdString(to_string( op1IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op1IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op1IEEE.bitfield.partFrac).parteEntera));
+    ui->op2_IEEE->setText(QString::fromStdString(to_string( op2IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op2IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op2IEEE.bitfield.partFrac).parteEntera));
 }
 void MainWindow::on_boton_suma_pressed()
 {
@@ -43,6 +43,8 @@ void MainWindow::on_boton_suma_pressed()
     //Operacion
 
     Alu::NumSolucion resultado = this->alu.suma(op1, op2);
+
+    ui->resultado_dec->setText( QString::fromStdString( alu.decToBinaryNormal(op1).parteEntera +" "+alu.decToBinaryNormal(op1).parteFraccionaria ));
 }
 
 void MainWindow::on_boton_producto_pressed()
