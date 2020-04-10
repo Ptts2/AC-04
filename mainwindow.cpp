@@ -52,7 +52,7 @@ void MainWindow::on_boton_producto_pressed()
     float op1 = atof(ui->operando1->text().toStdString().c_str());
     float op2 = atof(ui->operando2->text().toStdString().c_str());
 
-    Alu::NumSolucion resultado = this->alu.producto(0,0);
+    Alu::NumSolucion resultado = this->alu.producto(op1, op2);
 
 }
 
@@ -65,7 +65,7 @@ void MainWindow::on_boton_division_pressed()
     float op1 = atof(ui->operando1->text().toStdString().c_str());
     float op2 = atof(ui->operando2->text().toStdString().c_str());
 
-    Alu::NumSolucion resultado = this->alu.division(0,0);
+    Alu::NumSolucion resultado = this->alu.division(op1, op2);
 
 
 }
