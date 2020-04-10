@@ -174,11 +174,68 @@ Alu::NumSolucion Alu::suma(float operador1, float operador2)
 {
 
     NumSolucion solucion;
-    Code numSuma;
 
-    numSuma.numero = operador1;
+    int g = 0, r = 0, st = 0, n = 24;
+    bool operandosIntercambiados = false, complementadoP = false;
+    string mantisaA, mantisaB;
 
-    solucion.numIEEE = numSuma;
+    Code numSuma, operA, operB;
+    operA.numero=operador1;
+    operB.numero=operador2;
+
+    //Si el exponente de 1 es menor que el de 2 los intercambio
+    if(operA.bitfield.expo < operB.bitfield.expo)
+    {
+        Code aux = operA;
+        operA = operB;
+        operB = aux;
+        operandosIntercambiados = true;
+    }
+
+    int exponenteSuma = operA.bitfield.expo;
+    int d = operA.bitfield.expo - operB.bitfield.expo;
+
+    if(operA.bitfield.expo != operB.bitfield.expo){
+
+        Binario mantisa;
+        mantisa.parteEntera = "1";
+        mantisa.parteFraccionaria = decToBinaryNormal(operB.bitfield.partFrac).parteEntera;
+
+        Binario mantisaA2 = complementoA2(mantisa);
+        mantisaB = mantisaA2.parteEntera+mantisaA2.parteFraccionaria;
+    }else{
+        mantisaB = "1"+decToBinaryNormal(operB.bitfield.partFrac).parteEntera;
+    }
+
+    string P = mantisaB;
+
+    if(d<0 && d-1< (int)P.size() )
+        g = stoi(&P[d-1]);
+    if(d<1 && d-2< (int)P.size())
+        r = stoi(&P[d-2]);
+
+   int i = 0;
+    while(i<d-2 && st == 0){
+
+        if(strncmp(&P[i], "1", 1) == 0)
+            st = 1;
+        i++;
+    }
+
+    if(operA.bitfield.sign!=operB.bitfield.sign){
+
+        for(i = 0; i<d; i++){
+            P.insert(0,"1");
+            P.pop_back();
+        }
+
+    }else{
+
+        for(i = 0; i<d; i++){
+            P.insert(0,"0");
+            P.pop_back();
+        }
+    }
 
     return solucion;
 }
