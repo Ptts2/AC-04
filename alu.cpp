@@ -192,6 +192,7 @@ Alu::NumSolucion Alu::suma(float operador1, float operador2)
         operandosIntercambiados = true;
     }
 
+
     int exponenteSuma = operA.bitfield.expo;
     int d = operA.bitfield.expo - operB.bitfield.expo;
 
@@ -199,20 +200,30 @@ Alu::NumSolucion Alu::suma(float operador1, float operador2)
 
         Binario mantisa;
         mantisa.parteEntera = "1";
-        mantisa.parteFraccionaria = decToBinaryNormal(operB.bitfield.partFrac).parteEntera;
+        mantisa.parteFraccionaria = decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
 
         Binario mantisaA2 = complementoA2(mantisa);
         mantisaB = mantisaA2.parteEntera+mantisaA2.parteFraccionaria;
     }else{
-        mantisaB = "1"+decToBinaryNormal(operB.bitfield.partFrac).parteEntera;
+        mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
     }
+
+    mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
 
     string P = mantisaB;
 
-    if(d<0 && d-1< (int)P.size() )
-        g = stoi(&P[d-1]);
-    if(d<1 && d-2< (int)P.size())
-        r = stoi(&P[d-2]);
+    if(d<0 && d-1< (int)P.size() ){
+        if((strncmp(&P[d-1], "1", 1) == 0))
+            g = 1;
+        else
+            g = 0;
+    }if(d<1 && d-2< (int)P.size()){
+        if((strncmp(&P[d-2], "1", 1) == 0))
+            r = 1;
+        else
+            r = 0;
+    }
+
 
    int i = 0;
     while(i<d-2 && st == 0){
@@ -236,6 +247,48 @@ Alu::NumSolucion Alu::suma(float operador1, float operador2)
             P.pop_back();
         }
     }
+
+    int C = 0; //acarreo
+    string aux ="";
+    i = P.size()-1;
+
+    while(i>=0){
+
+        if( (strncmp(&mantisaA[i], "1", 1) == 0) && (strncmp(&P[i], "1", 1) == 0) )
+        {
+            //Si son ambos 1
+
+            if(C==0){
+               //Si no hay acarreo
+               aux += "0";
+               C=1;
+            }else{
+                //Si hay acarreo
+                aux +="1";
+            }
+        }else if( (strncmp(&mantisaA[i], "0", 1) == 0) && (strncmp(&P[i], "0", 1) == 0) )
+        {
+            //Si son ambos 0
+            if(C==0){
+               aux += "0";
+            }else{
+               aux += "1";
+               C=0;
+            }
+        }else
+        {
+            //Si son 0+1 o 1+0
+            if(C==0){
+               aux += "1";
+            }else{
+                aux +="0";
+            }
+        }
+
+        i--;
+    }
+    reverse(aux.begin(), aux.end());
+    P = aux;
 
     return solucion;
 }
