@@ -250,13 +250,13 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     string P = mantisaB;
 
-    if(d<0 && d-1< (int)P.size() ){
-        if((strncmp(&P[d-1], "1", 1) == 0))
+    if(d>0 && d-1< (int)P.size() ){
+        if((strncmp(&P[(n-1)-(d-1)], "1", 1) == 0))
             g = 1;
         else
             g = 0;
-    }if(d<1 && d-2< (int)P.size()){
-        if((strncmp(&P[d-2], "1", 1) == 0))
+    }if(d>1 && d-2< (int)P.size()){
+        if((strncmp(&P[(n-1)-(d-2)], "1", 1) == 0))
             r = 1;
         else
             r = 0;
@@ -266,7 +266,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
    int i = 0;
     while(i<d-2 && st == 0){
 
-        if(strncmp(&P[i], "1", 1) == 0)
+        if(strncmp(&P[(n-1)-i], "1", 1) == 0)
             st = 1;
         i++;
     }
@@ -328,7 +328,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
     reverse(aux.begin(), aux.end());
     P = aux;
 
-    if( (operA.bitfield.sign!=operB.bitfield.sign) && (strncmp(&P[n-1], "1", 1) == 0) && (C == 0) )
+    if( (operA.bitfield.sign!=operB.bitfield.sign) && (strncmp(&P[0], "1", 1) == 0) && (C == 0) )
     {
 
         Binario p;
@@ -341,7 +341,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
     if( (operA.bitfield.sign==operB.bitfield.sign) && (C==1) )
     {
         st = (g||r||st);
-        (strncmp(&P[0], "1", 1) == 0)? r=1:r=0;
+        (strncmp(&P[n-1], "1", 1) == 0)? r=1:r=0;
         P.pop_back();
         P.insert(0,"1");
 
@@ -380,7 +380,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     int C2 = 0; //Acarreo 2
 
-    if( (r==1 && st==1) || (r==1 && st == 0 && (strncmp(&P[0], "1", 1) == 0)) )
+    if( (r==1 && st==1) || (r==1 && st == 0 && (strncmp(&P[n-1], "1", 1) == 0)) )
     {
 
         i = P.size()-1;
