@@ -454,7 +454,6 @@ Alu::Code Alu::suma(float operador1, float operador2)
     solucion.bitfield.expo = exponenteSuma;
     solucion.bitfield.partFrac = binaryToDec(mantisaSuma);
 
-    cout<<"solucion: "<<solucion.numero<<endl;
 
     return solucion;
 }
