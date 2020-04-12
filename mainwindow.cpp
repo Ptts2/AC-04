@@ -42,12 +42,13 @@ void MainWindow::on_boton_suma_pressed()
 
     //Operacion
 
-    Alu::NumSolucion resultado = this->alu.suma(op1, op2);
+    Alu::Code resultado = this->alu.suma(op1, op2);
 
     Alu::Binario op1bin =alu.decToBinaryNormal(op1);
     Alu::Binario compA2 = alu.complementoA2(op1bin);
 
-   ui->resultado_dec->setText( QString::fromStdString( compA2.parteEntera +" "+compA2.parteFraccionaria ));
+    ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
+    ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
 }
 
 void MainWindow::on_boton_producto_pressed()
@@ -57,7 +58,7 @@ void MainWindow::on_boton_producto_pressed()
     float op1 = atof(ui->operando1->text().toStdString().c_str());
     float op2 = atof(ui->operando2->text().toStdString().c_str());
 
-    Alu::NumSolucion resultado = this->alu.producto(op1, op2);
+    Alu::Code resultado = this->alu.producto(op1, op2);
 
 }
 
@@ -70,7 +71,7 @@ void MainWindow::on_boton_division_pressed()
     float op1 = atof(ui->operando1->text().toStdString().c_str());
     float op2 = atof(ui->operando2->text().toStdString().c_str());
 
-    Alu::NumSolucion resultado = this->alu.division(op1, op2);
+    Alu::Code resultado = this->alu.division(op1, op2);
 
 
 }

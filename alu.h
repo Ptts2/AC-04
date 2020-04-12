@@ -32,9 +32,9 @@ public:
 
     Alu();
     ~Alu();
-    NumSolucion suma(float operador1, float operador2);
-    NumSolucion producto(float operador1, float operador2);
-    NumSolucion division(float operador1, float operador2);
+    Code suma(float operador1, float operador2);
+    Code producto(float operador1, float operador2);
+    Code division(float operador1, float operador2);
     Code fromDecToIEEE754(float num);
     Binario decToBinaryIEEE(float num, int nBits = 23);
     Binario decToBinaryNormal(float num);
@@ -42,8 +42,8 @@ public:
 
 private:
 
+    unsigned int binaryToDec(std::string bin);
 
-    float binaryToDec(Binario bin);
 
 };
 

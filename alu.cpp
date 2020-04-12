@@ -12,7 +12,8 @@ Alu::Alu()
 
 Alu::~Alu(){}
 
-Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
+Alu::Binario Alu::decToBinaryIEEE(float num, int nBits)
+{
 
 
     Binario mantisa;
@@ -25,7 +26,8 @@ Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
     //Convertir la parte entera a binario
     string parteEnteraString = "";
     int contPartEntera = 0;
-    while(parteEnteraInt>0 && contPartEntera<=23){
+    while(parteEnteraInt>0 && contPartEntera<=23)
+    {
         parteEnteraString += std::to_string(parteEnteraInt%2);
         parteEnteraInt = parteEnteraInt/2;
         contPartEntera++;
@@ -40,7 +42,8 @@ Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
     string parteFraccString;
     int contPartFrac = 0;
 
-    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=nBits){
+    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=nBits)
+    {
 
         float parteEnteraDec;
         parteFraccionaria *=2;
@@ -52,9 +55,11 @@ Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
         contPartFrac++;
     }
 
-     if((contPartEntera+contPartFrac) < nBits){
+     if((contPartEntera+contPartFrac) < nBits)
+     {
 
-         while((contPartEntera+contPartFrac) <=nBits){
+         while((contPartEntera+contPartFrac) <=nBits)
+         {
              parteFraccString += "0";
              contPartFrac++;
          }
@@ -64,7 +69,8 @@ Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
 
 
 
-     while((int)mantisa.parteEntera.size()<nBits){
+     while((int)mantisa.parteEntera.size()<nBits)
+     {
 
          mantisa.parteEntera.insert(0, "0");
      }
@@ -72,7 +78,8 @@ Alu::Binario Alu::decToBinaryIEEE(float num, int nBits){
 
 }
 
-Alu::Binario Alu::decToBinaryNormal(float num){
+Alu::Binario Alu::decToBinaryNormal(float num)
+{
 
 
     Binario mantisa;
@@ -85,7 +92,8 @@ Alu::Binario Alu::decToBinaryNormal(float num){
     //Convertir la parte entera a binario
     string parteEnteraString = "";
     int contPartEntera = 0;
-    while(parteEnteraInt>0 && contPartEntera<=23){
+    while(parteEnteraInt>0 && contPartEntera<=23)
+    {
         parteEnteraString += std::to_string(parteEnteraInt%2);
         parteEnteraInt = parteEnteraInt/2;
         contPartEntera++;
@@ -100,7 +108,8 @@ Alu::Binario Alu::decToBinaryNormal(float num){
     string parteFraccString;
     int contPartFrac = 0;
 
-    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=23){
+    while(parteFraccionaria!=0 && (contPartEntera+contPartFrac) <=23)
+    {
 
         float parteEnteraDec;
         parteFraccionaria *=2;
@@ -112,9 +121,11 @@ Alu::Binario Alu::decToBinaryNormal(float num){
         contPartFrac++;
     }
 
-     if((contPartEntera+contPartFrac) < 23){
+     if((contPartEntera+contPartFrac) < 23)
+     {
 
-         while((contPartEntera+contPartFrac) <=23){
+         while((contPartEntera+contPartFrac) <=23)
+         {
              parteFraccString += "0";
              contPartFrac++;
          }
@@ -126,7 +137,8 @@ Alu::Binario Alu::decToBinaryNormal(float num){
 
 }
 
-Alu::Binario Alu::complementoA2(Alu::Binario num){
+Alu::Binario Alu::complementoA2(Alu::Binario num)
+{
 
    Alu::Binario binarioCompA2;
 
@@ -135,7 +147,8 @@ Alu::Binario Alu::complementoA2(Alu::Binario num){
    int posPrimer1 = binario.size()-1;
    string binarioA2 ="";
 
-   while( strncmp(&binario[posPrimer1], "1", 1) != 0 && posPrimer1 > 0){
+   while( strncmp(&binario[posPrimer1], "1", 1) != 0 && posPrimer1 > 0)
+   {
        binarioA2 += binario.at(posPrimer1);
        posPrimer1--;
    }
@@ -143,7 +156,8 @@ Alu::Binario Alu::complementoA2(Alu::Binario num){
    binarioA2 +="1";
    int i = posPrimer1-1;
 
-   while(i>=0){
+   while(i>=0)
+   {
 
        if( strncmp(&binario[i], "1", 1) == 0)
            binarioA2 += "0";
@@ -162,22 +176,46 @@ Alu::Binario Alu::complementoA2(Alu::Binario num){
    return binarioCompA2;
 }
 
-Alu::Code Alu::fromDecToIEEE754(float num){
+Alu::Code Alu::fromDecToIEEE754(float num)
+{
 
     Code a;
     a.numero = num;
     return a;
 
 }
-
-Alu::NumSolucion Alu::suma(float operador1, float operador2)
+unsigned int Alu::binaryToDec(string bin)
 {
 
-    NumSolucion solucion;
+    unsigned int resultado = 0;
+
+    int i = bin.size()-1;
+    int j = 0;
+
+    while(i>=0)
+    {
+        if(strncmp(&bin[i], "1", 1) == 0)
+        {
+
+            resultado += pow(2,j);
+
+        }
+
+        i--;
+        j++;
+    }
+
+    return resultado;
+}
+
+Alu::Code Alu::suma(float operador1, float operador2)
+{
+
+    Code solucion;
 
     int g = 0, r = 0, st = 0, n = 24;
     bool operandosIntercambiados = false, complementadoP = false;
-    string mantisaA, mantisaB;
+    string mantisaA, mantisaB, mantisaSuma;
 
     Code numSuma, operA, operB;
     operA.numero=operador1;
@@ -290,20 +328,148 @@ Alu::NumSolucion Alu::suma(float operador1, float operador2)
     reverse(aux.begin(), aux.end());
     P = aux;
 
+    if( (operA.bitfield.sign!=operB.bitfield.sign) && (strncmp(&P[n-1], "1", 1) == 0) && (C == 0) )
+    {
+
+        Binario p;
+        p.parteEntera = P;
+        P = complementoA2(p).parteEntera;
+        complementadoP = true;
+    }
+
+
+    if( (operA.bitfield.sign==operB.bitfield.sign) && (C==1) )
+    {
+        st = (g||r||st);
+        (strncmp(&P[0], "1", 1) == 0)? r=1:r=0;
+        P.pop_back();
+        P.insert(0,"1");
+
+        exponenteSuma++;
+    }else
+    {
+
+        int K = 0;
+        while( (strncmp(&P[K], "1", 1) != 0) )
+            K++;
+
+        if(K==0)
+        {
+          st=(r||st);
+          r = g;
+        }
+        if(K>1)
+        {
+            r = 0;
+            st = 0;
+        }
+
+        i=K;
+        while(i>0)
+        {
+            P.erase(0,1);
+            if(g==0)
+                P += "0";
+            else
+                P += "1";
+            i--;
+        }
+
+        exponenteSuma -= K;
+    }
+
+    int C2 = 0; //Acarreo 2
+
+    if( (r==1 && st==1) || (r==1 && st == 0 && (strncmp(&P[0], "1", 1) == 0)) )
+    {
+
+        i = P.size()-1;
+        string uno ="000000000000000000000001";
+        string aux2 ="";
+        while(i>=0){
+
+            if( (strncmp(&uno[i], "1", 1) == 0) && (strncmp(&P[i], "1", 1) == 0) )
+            {
+                //Si son ambos 1
+
+                if(C2==0){
+                   //Si no hay acarreo
+                   aux2 += "0";
+                   C2=1;
+                }else{
+                    //Si hay acarreo
+                    aux2 +="1";
+                }
+            }else if( (strncmp(&uno[i], "0", 1) == 0) && (strncmp(&P[i], "0", 1) == 0) )
+            {
+                //Si son ambos 0
+                if(C2==0){
+                   aux2 += "0";
+                }else{
+                   aux2 += "1";
+                   C2=0;
+                }
+            }else
+            {
+                //Si son 0+1 o 1+0
+                if(C2==0){
+                   aux2 += "1";
+                }else{
+                    aux2 +="0";
+                }
+            }
+
+            i--;
+        }
+        reverse(aux2.begin(), aux2.end());
+        P = aux2;
+
+
+
+        if(C2==1)
+        {
+            P.pop_back();
+            P.insert(0,"1");
+            exponenteSuma++;
+        }
+    }
+
+
+    mantisaSuma = P;
+    int signoSuma;
+
+    if( !operandosIntercambiados && complementadoP)
+        signoSuma = operB.bitfield.sign;
+    else
+        signoSuma = operA.bitfield.sign;
+
+    mantisaSuma.erase(0,1);
+
+    /*
+    string resultadoFinal;
+    resultadoFinal = to_string(signoSuma)+" "+decToBinaryIEEE(exponenteSuma,8).parteEntera+" "+mantisaSuma;
+    */
+
+    solucion.bitfield.sign = signoSuma;
+    solucion.bitfield.expo = exponenteSuma;
+    solucion.bitfield.partFrac = binaryToDec(mantisaSuma);
+
+    cout<<"solucion: "<<solucion.numero<<endl;
+
     return solucion;
 }
 
-Alu::NumSolucion Alu::producto(float operador1, float operador2)
+Alu::Code Alu::producto(float operador1, float operador2)
 {
 
-    NumSolucion solucion;
+    Code solucion;
     return solucion;
 }
 
-Alu::NumSolucion Alu::division(float operador1, float operador2)
+Alu::Code Alu::division(float operador1, float operador2)
 {
 
-    NumSolucion solucion;
+    Code solucion;
     return solucion;
 }
 
