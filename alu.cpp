@@ -445,15 +445,9 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     mantisaSuma.erase(0,1);
 
-    /*
-    string resultadoFinal;
-    resultadoFinal = to_string(signoSuma)+" "+decToBinaryIEEE(exponenteSuma,8).parteEntera+" "+mantisaSuma;
-    */
-
     solucion.bitfield.sign = signoSuma;
     solucion.bitfield.expo = exponenteSuma;
     solucion.bitfield.partFrac = binaryToDec(mantisaSuma);
-
 
     return solucion;
 }
