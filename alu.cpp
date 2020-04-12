@@ -424,8 +424,6 @@ Alu::Code Alu::suma(float operador1, float operador2)
         reverse(aux2.begin(), aux2.end());
         P = aux2;
 
-
-
         if(C2==1)
         {
             P.pop_back();
@@ -433,7 +431,6 @@ Alu::Code Alu::suma(float operador1, float operador2)
             exponenteSuma++;
         }
     }
-
 
     mantisaSuma = P;
     int signoSuma;
