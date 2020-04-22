@@ -234,7 +234,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
     int exponenteSuma = operA.bitfield.expo;
     int d = operA.bitfield.expo - operB.bitfield.expo;
 
-    if(operA.bitfield.expo != operB.bitfield.expo){
+    if(operA.bitfield.sign != operB.bitfield.sign){
 
         Binario mantisa;
         mantisa.parteEntera = "1";
@@ -264,7 +264,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
 
    int i = 0;
-    while(i<d-2 && st == 0){
+   while(i<=d-2 && st == 0){
 
         if(strncmp(&P[(n-1)-i], "1", 1) == 0)
             st = 1;
