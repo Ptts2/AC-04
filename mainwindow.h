@@ -28,5 +28,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Alu alu;
+    std::string getHexString(unsigned int hex);
+
 };
 #endif // MAINWINDOW_H

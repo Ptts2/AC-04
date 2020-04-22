@@ -20,7 +20,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow:: setIEEEOperands(){
+std::string MainWindow::getHexString(unsigned int hex){
+
+    string representacionHex = "0x";
+    std::ostringstream numeroHex;
+    numeroHex<<std::hex<<std::uppercase<< hex;
+    representacionHex+= numeroHex.str();
+
+    return representacionHex;
+
+}
+
+void MainWindow::setIEEEOperands(){
     float op1 = atof(ui->operando1->text().toStdString().c_str());
     float op2 = atof(ui->operando2->text().toStdString().c_str());
 
@@ -29,6 +40,10 @@ void MainWindow:: setIEEEOperands(){
 
     ui->op1_IEEE->setText(QString::fromStdString(to_string( op1IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op1IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op1IEEE.bitfield.partFrac).parteEntera));
     ui->op2_IEEE->setText(QString::fromStdString(to_string( op2IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op2IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op2IEEE.bitfield.partFrac).parteEntera));
+
+    ui->op1_hex->setText( QString::fromStdString(getHexString(op1IEEE.numerox)) );
+    ui->op2_hex->setText( QString::fromStdString(getHexString(op2IEEE.numerox)) );
+
 }
 void MainWindow::on_boton_suma_pressed()
 {
@@ -49,7 +64,10 @@ void MainWindow::on_boton_suma_pressed()
 
     ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
     ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+    ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+
 }
+
 
 void MainWindow::on_boton_producto_pressed()
 {

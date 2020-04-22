@@ -44,7 +44,6 @@ private:
 
     unsigned int binaryToDec(std::string bin);
 
-
 };
 
 #endif // ALU_H
