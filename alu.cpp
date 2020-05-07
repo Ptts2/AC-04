@@ -548,11 +548,10 @@ string Alu::multiplicacionBinariaSinSigno(string A, string B)
         }
         cout<<"3:"<<P<<"-"<<A<<endl;
 
-        P[0] = C;
-
-
-
-
+        if(C==0)
+        P[0] = 0x30;
+        else
+        P[0] = 0x31;
     }
     cout<<"2:"<<P<<"+"<<A<<endl;
     return P+A;
