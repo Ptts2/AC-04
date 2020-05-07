@@ -43,6 +43,7 @@ public:
 private:
 
     unsigned int binaryToDec(std::string bin);
+    std::string multiplicacionBinariaSinSigno(std::string a, std::string b);
 
 };
 

@@ -453,7 +453,109 @@ Alu::Code Alu::producto(float operador1, float operador2)
 {
 
     Code solucion;
+
+    Code operA, operB;
+    operA.numero=operador1;
+    operB.numero=operador2;
+
+    if(operA.bitfield.sign==1 ^ operB.bitfield.sign==1)
+    {
+        solucion.bitfield.sign=1;
+    }else
+    {
+        solucion.bitfield.sign=0;
+    }
+
+    solucion.bitfield.expo = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
+
+    string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
+    string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
+
+    string PA = multiplicacionBinariaSinSigno(mantisaA, mantisaB);
+
+    cout<< PA<<endl;
+
     return solucion;
+}
+
+string Alu::multiplicacionBinariaSinSigno(string A, string B)
+{
+    string P = "000000000000000000000000";
+    int n = 24;
+    int C = 0; //acarreo
+
+    for(int j=0; j<n;j++)
+    {
+        if(strncmp(&P[23], "1", 1) == 0)
+        {
+
+            string aux ="";
+            int i = P.size()-1;
+
+            while(i>=0){
+
+                if( (strncmp(&P[i], "1", 1) == 0) && (strncmp(&B[i], "1", 1) == 0) )
+                {
+                    //Si son ambos 1
+
+                    if(C==0){
+                       //Si no hay acarreo
+                       aux += "0";
+                       C=1;
+                    }else{
+                        //Si hay acarreo
+                        aux +="1";
+                    }
+                }else if( (strncmp(&P[i], "0", 1) == 0) && (strncmp(&B[i], "0", 1) == 0) )
+                {
+                    //Si son ambos 0
+                    if(C==0){
+                       aux += "0";
+                    }else{
+                       aux += "1";
+                       C=0;
+                    }
+                }else
+                {
+                    //Si son 0+1 o 1+0
+                    if(C==0){
+                       aux += "1";
+                    }else{
+                        aux +="0";
+                    }
+                }
+
+                i--;
+            }
+            reverse(aux.begin(), aux.end());
+            P = aux;
+        }
+
+
+
+        for(int k=23;k>0;k--)
+        {
+            A[k] = A[k-1];
+        }
+
+        A[0] = P[23];
+
+        cout<<"1:"<<P<<":"<<A<<endl;
+
+        for(int k=23;k>0;k--)
+        {
+            P[k] = P[k-1];
+        }
+        cout<<"3:"<<P<<"-"<<A<<endl;
+
+        P[0] = C;
+
+
+
+
+    }
+    cout<<"2:"<<P<<"+"<<A<<endl;
+    return P+A;
 }
 
 Alu::Code Alu::division(float operador1, float operador2)
