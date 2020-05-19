@@ -473,20 +473,19 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     string PA = multiplicacionBinariaSinSigno(mantisaA, mantisaB);
 
-    cout<< PA<<endl;
-
     return solucion;
 }
 
 string Alu::multiplicacionBinariaSinSigno(string A, string B)
 {
     string P = "000000000000000000000000";
+    string A2 = A;
     int n = 24;
     int C = 0; //acarreo
 
     for(int j=0; j<n;j++)
     {
-        if(strncmp(&P[23], "1", 1) == 0)
+        if(strncmp(&A2[23], "1", 1) == 0)
         {
 
             string aux ="";
@@ -531,30 +530,25 @@ string Alu::multiplicacionBinariaSinSigno(string A, string B)
             P = aux;
         }
 
-
-
         for(int k=23;k>0;k--)
         {
-            A[k] = A[k-1];
+            A2[k] = A2[k-1];
         }
 
-        A[0] = P[23];
-
-        cout<<"1:"<<P<<":"<<A<<endl;
+        A2[0] = P[23];
 
         for(int k=23;k>0;k--)
         {
             P[k] = P[k-1];
         }
-        cout<<"3:"<<P<<"-"<<A<<endl;
+
 
         if(C==0)
         P[0] = 0x30;
         else
         P[0] = 0x31;
     }
-    cout<<"2:"<<P<<"+"<<A<<endl;
-    return P+A;
+    return P+A2;
 }
 
 Alu::Code Alu::division(float operador1, float operador2)
