@@ -449,6 +449,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     solucion.bitfield.expo = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
 
+    cout << "Exp+127: " << solucion.bitfield.expo << endl << "Exp: " << solucion.bitfield.expo-127 << endl;
+
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
 
@@ -467,9 +469,6 @@ Alu::Code Alu::producto(float operador1, float operador2)
         solucion.bitfield.expo = solucion.bitfield.expo + 1;
      }
 
-    cout << "P: " << PA[0] << "A: " << PA[1] << endl;
-
-    /*
     if(strncmp(&PA[1][23], "0", 1) == 0)
         r = 0;
     else
@@ -488,12 +487,39 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     if( (r == 1 && st == 1)  || (r == 1 && st == 0 && (strncmp(&PA[0][23], "1", 1) == 0) ) ) {
 
-
-
+         string uno ="000000000000000000000001";
+         PA[0] = sumaNumerosBinarios(PA[0], uno).binario;
 
     }
 
-*/
+    int t;
+    if(solucion.bitfield.expo - 127 > 127){
+
+        //Devolver infinito
+    }else if(solucion.bitfield.expo - 127 < -126){
+
+         t = -126 - (solucion.bitfield.expo - 127);
+
+         if(t>=24){
+
+             //Devolver underflow (NaN, ind...)
+         }else{
+             for(int j = 0; j<t ; j++){
+
+                for(int i=(int)PA[1].size()-1;i>0;i--)
+                    PA[1][i] = PA[1][i-1];
+
+                PA[1][0] = PA[0][PA[0].size()-1];
+
+                for(int i=PA[0].size()-1;i>0;i--)
+                    PA[0][i] = PA[0][i-1];
+                PA[0][0] = 0x30;
+             }
+            solucion.bitfield.expo = -126 + 127;
+         }
+    }
+
+
     return solucion;
 }
 
