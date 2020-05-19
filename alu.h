@@ -30,6 +30,11 @@ public:
         int numHex;
     };
 
+    struct BinYAcarreo{
+        std::string binario;
+        int acarreo;
+    };
+
     Alu();
     ~Alu();
     Code suma(float operador1, float operador2);
@@ -43,7 +48,8 @@ public:
 private:
 
     unsigned int binaryToDec(std::string bin);
-    std::string multiplicacionBinariaSinSigno(std::string a, std::string b);
+    std::string *multiplicacionBinariaSinSigno(std::string a, std::string b);
+    BinYAcarreo sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C=0);
 
 };
 

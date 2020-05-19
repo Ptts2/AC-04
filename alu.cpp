@@ -208,6 +208,57 @@ unsigned int Alu::binaryToDec(string bin)
     return resultado;
 }
 
+
+Alu::BinYAcarreo Alu::sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C) {
+
+
+    BinYAcarreo solucion;
+
+    string aux ="";
+    int i = Operador1.size()-1;
+
+    while(i>=0){
+
+        if( (strncmp(&Operador1[i], "1", 1) == 0) && (strncmp(&Operador2[i], "1", 1) == 0) )
+        {
+            //Si son ambos 1
+
+            if(C==0){
+               //Si no hay acarreo
+               aux += "0";
+               C=1;
+            }else{
+                //Si hay acarreo
+                aux +="1";
+            }
+        }else if( (strncmp(&Operador1[i], "0", 1) == 0) && (strncmp(&Operador2[i], "0", 1) == 0) )
+        {
+            //Si son ambos 0
+            if(C==0){
+               aux += "0";
+            }else{
+               aux += "1";
+               C=0;
+            }
+        }else
+        {
+            //Si son 0+1 o 1+0
+            if(C==0){
+               aux += "1";
+            }else{
+                aux +="0";
+            }
+        }
+
+        i--;
+    }
+    reverse(aux.begin(), aux.end());
+
+    solucion.binario = aux;
+    solucion.acarreo = C;
+    return solucion;
+}
+
 Alu::Code Alu::suma(float operador1, float operador2)
 {
 
@@ -287,46 +338,10 @@ Alu::Code Alu::suma(float operador1, float operador2)
     }
 
     int C = 0; //acarreo
-    string aux ="";
-    i = P.size()-1;
 
-    while(i>=0){
-
-        if( (strncmp(&mantisaA[i], "1", 1) == 0) && (strncmp(&P[i], "1", 1) == 0) )
-        {
-            //Si son ambos 1
-
-            if(C==0){
-               //Si no hay acarreo
-               aux += "0";
-               C=1;
-            }else{
-                //Si hay acarreo
-                aux +="1";
-            }
-        }else if( (strncmp(&mantisaA[i], "0", 1) == 0) && (strncmp(&P[i], "0", 1) == 0) )
-        {
-            //Si son ambos 0
-            if(C==0){
-               aux += "0";
-            }else{
-               aux += "1";
-               C=0;
-            }
-        }else
-        {
-            //Si son 0+1 o 1+0
-            if(C==0){
-               aux += "1";
-            }else{
-                aux +="0";
-            }
-        }
-
-        i--;
-    }
-    reverse(aux.begin(), aux.end());
-    P = aux;
+    BinYAcarreo suma = sumaNumerosBinarios(mantisaA, P, C);
+    P = suma.binario;
+    C = suma.acarreo;
 
     if( (operA.bitfield.sign!=operB.bitfield.sign) && (strncmp(&P[0], "1", 1) == 0) && (C == 0) )
     {
@@ -383,46 +398,10 @@ Alu::Code Alu::suma(float operador1, float operador2)
     if( (r==1 && st==1) || (r==1 && st == 0 && (strncmp(&P[n-1], "1", 1) == 0)) )
     {
 
-        i = P.size()-1;
         string uno ="000000000000000000000001";
-        string aux2 ="";
-        while(i>=0){
-
-            if( (strncmp(&uno[i], "1", 1) == 0) && (strncmp(&P[i], "1", 1) == 0) )
-            {
-                //Si son ambos 1
-
-                if(C2==0){
-                   //Si no hay acarreo
-                   aux2 += "0";
-                   C2=1;
-                }else{
-                    //Si hay acarreo
-                    aux2 +="1";
-                }
-            }else if( (strncmp(&uno[i], "0", 1) == 0) && (strncmp(&P[i], "0", 1) == 0) )
-            {
-                //Si son ambos 0
-                if(C2==0){
-                   aux2 += "0";
-                }else{
-                   aux2 += "1";
-                   C2=0;
-                }
-            }else
-            {
-                //Si son 0+1 o 1+0
-                if(C2==0){
-                   aux2 += "1";
-                }else{
-                    aux2 +="0";
-                }
-            }
-
-            i--;
-        }
-        reverse(aux2.begin(), aux2.end());
-        P = aux2;
+        BinYAcarreo suma2 = sumaNumerosBinarios(P, uno, C2);
+        P=suma2.binario;
+        C2=suma2.acarreo;
 
         if(C2==1)
         {
@@ -455,6 +434,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
     Code solucion;
 
     Code operA, operB;
+    int st, r;
+
     operA.numero=operador1;
     operB.numero=operador2;
 
@@ -471,12 +452,52 @@ Alu::Code Alu::producto(float operador1, float operador2)
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
 
-    string PA = multiplicacionBinariaSinSigno(mantisaA, mantisaB);
+    string *PA =  multiplicacionBinariaSinSigno(mantisaA, mantisaB); //24 bits P + 24 bits A
 
+    if(strncmp(&PA[0][0], "0", 1) == 0) {
+
+       for(int i=0;i<(int)PA[0].size()-1;i++)
+           PA[0][i] = PA[0][i+1];
+       PA[0][PA[0].size()-1] = PA[1][0];
+       for(int i=0;i<(int)PA[1].size()-1;i++)
+           PA[1][i] = PA[1][i+1];
+        PA[1][PA[1].size()-1] = 0x30;
+
+      } else {
+        solucion.bitfield.expo = solucion.bitfield.expo + 1;
+     }
+
+    cout << "P: " << PA[0] << "A: " << PA[1] << endl;
+
+    /*
+    if(strncmp(&PA[1][23], "0", 1) == 0)
+        r = 0;
+    else
+        r = 1;
+
+    int n = 0;
+    st = 0;
+
+    while(st == 0 && n<23){
+
+        if(strncmp(&PA[1][n], "1", 1) == 0)
+            st = 1;
+        n++;
+    }
+
+
+    if( (r == 1 && st == 1)  || (r == 1 && st == 0 && (strncmp(&PA[0][23], "1", 1) == 0) ) ) {
+
+
+
+
+    }
+
+*/
     return solucion;
 }
 
-string Alu::multiplicacionBinariaSinSigno(string A, string B)
+string *Alu::multiplicacionBinariaSinSigno(string A, string B)
 {
     string P = "000000000000000000000000";
     string A2 = A;
@@ -486,69 +507,27 @@ string Alu::multiplicacionBinariaSinSigno(string A, string B)
     for(int j=0; j<n;j++)
     {
         if(strncmp(&A2[23], "1", 1) == 0)
-        {
-
-            string aux ="";
-            int i = P.size()-1;
-
-            while(i>=0){
-
-                if( (strncmp(&P[i], "1", 1) == 0) && (strncmp(&B[i], "1", 1) == 0) )
-                {
-                    //Si son ambos 1
-
-                    if(C==0){
-                       //Si no hay acarreo
-                       aux += "0";
-                       C=1;
-                    }else{
-                        //Si hay acarreo
-                        aux +="1";
-                    }
-                }else if( (strncmp(&P[i], "0", 1) == 0) && (strncmp(&B[i], "0", 1) == 0) )
-                {
-                    //Si son ambos 0
-                    if(C==0){
-                       aux += "0";
-                    }else{
-                       aux += "1";
-                       C=0;
-                    }
-                }else
-                {
-                    //Si son 0+1 o 1+0
-                    if(C==0){
-                       aux += "1";
-                    }else{
-                        aux +="0";
-                    }
-                }
-
-                i--;
-            }
-            reverse(aux.begin(), aux.end());
-            P = aux;
-        }
+            P = sumaNumerosBinarios(P, B).binario;
 
         for(int k=23;k>0;k--)
-        {
             A2[k] = A2[k-1];
-        }
 
         A2[0] = P[23];
 
         for(int k=23;k>0;k--)
-        {
-            P[k] = P[k-1];
-        }
-
+           P[k] = P[k-1];
 
         if(C==0)
-        P[0] = 0x30;
+        P[0] = 0x30; // cero
         else
-        P[0] = 0x31;
+        P[0] = 0x31; // uno
     }
-    return P+A2;
+
+    string *PA = new string[3];
+    PA[0] = P;
+    PA[1] = A2;
+
+    return PA;
 }
 
 Alu::Code Alu::division(float operador1, float operador2)
