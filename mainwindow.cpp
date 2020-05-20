@@ -78,9 +78,18 @@ void MainWindow::on_boton_producto_pressed()
 
     Alu::Code resultado = this->alu.producto(op1, op2);
 
-    ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
-    ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
-    ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+    if(resultado.nan)
+    {
+        ui->resultado_dec->setText( QString::fromStdString( "NaN" ));
+        ui->resultado_IEEE->setText(QString::fromStdString( "NaN" ));
+        ui->resultado_hex->setText( QString::fromStdString( "NaN" ));
+    }else
+    {
+        ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
+        ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+        ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+
+    }
 }
 
 

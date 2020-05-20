@@ -504,15 +504,16 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     int t;
     if(solucion.bitfield.expo - 127 > 127){
-
-        //Devolver infinito
+        solucion.nan = true;
+        return solucion; //Devolver infinito
     }else if(solucion.bitfield.expo - 127 < -126){
 
          t = -126 - (solucion.bitfield.expo - 127);
 
          if(t>=24){
+             solucion.nan = true;
+             return solucion; //Devolver underflow (NaN, ind...)
 
-             //Devolver underflow (NaN, ind...)
          }else{
              for(int j = 0; j<t ; j++)
              {
@@ -535,8 +536,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
     {
         if(solucion.bitfield.expo -127 < -126)
         {
-
-        //Devolver underflow (NaN, ind...)
+            solucion.nan = true;
+            return solucion; //Devolver underflow (NaN, ind...)
         }else if(solucion.bitfield.expo -127 > -126)
         {
             int t1 = 0, t2= 0, t = 0;
