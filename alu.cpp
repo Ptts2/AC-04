@@ -436,7 +436,13 @@ Alu::Code Alu::producto(float operador1, float operador2)
 {
 
     Code solucion;
-
+    if(operador1 == 0 || operador2 == 0)
+    {
+        solucion.bitfield.expo = 0;
+        solucion.bitfield.sign = 0;
+        solucion.bitfield.partFrac = 0;
+        return solucion;
+    }
     Code operA, operB;
     int st, r;
 
@@ -452,8 +458,6 @@ Alu::Code Alu::producto(float operador1, float operador2)
     }
 
     solucion.bitfield.expo = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
-
-    cout << "Exp+127: " << solucion.bitfield.expo << endl << "Exp: " << solucion.bitfield.expo-127 << endl;
 
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
@@ -564,6 +568,9 @@ Alu::Code Alu::producto(float operador1, float operador2)
             //resultado denormal
         }
     }
+    string mantisaMultiplicacion = PA[0];
+    mantisaMultiplicacion.erase(0,1);
+    solucion.bitfield.partFrac = binaryToDec(mantisaMultiplicacion);
     return solucion;
 }
 
