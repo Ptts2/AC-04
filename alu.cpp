@@ -216,7 +216,6 @@ bool Alu::denormal(Code operando)
 string Alu::escalar(Binario operador)
 {
     string entera = operador.parteEntera, fraccionaria = operador.parteFraccionaria, enteraNueva, fraccionariaNueva;
-    int i = 0;
     while(strncmp(&entera[0], "0", 1) == 0)
     {
         entera.erase(0,1);
@@ -234,22 +233,11 @@ float Alu::fraccionarBinaryToDec(string binario)
     parteEntera = binario.substr(0,binario.find(","));
     parteFraccionaria = binario.substr(binario.find(",")+1, binario.size());
     solucion += binaryToDec(parteEntera);
-    int i = parteFraccionaria.size()-1;
-    int j = 0;
 
-    while(i>=0)
-    {
+    for(int i = 0; i<(int)parteFraccionaria.size(); i++){
         if(strncmp(&parteFraccionaria[i], "1", 1) == 0)
-        {
-
-            solucion += pow(2,-j);
-
-        }
-
-        i--;
-        j++;
+            solucion += 1/pow(2,i+1);
     }
-    cout << "s " << solucion << endl;
     return solucion;
 }
 Alu::BinYAcarreo Alu::sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C) {
@@ -652,7 +640,6 @@ Alu::Code Alu::division(float operador1, float operador2)
 
     Code solucion;
     string oper1 = escalar(decToBinaryIEEE(operador1)), oper2 = escalar(decToBinaryIEEE(operador2));
-    cout << "oper1 "<< oper1<<endl;
     fraccionarBinaryToDec(oper1);
     return solucion;
 }
