@@ -25,12 +25,6 @@ public:
         unsigned int numerox;
     };
 
-    struct NumSolucion{
-        float numDec;
-        Code numIEEE;
-        int numHex;
-    };
-
     struct BinYAcarreo{
         std::string binario;
         int acarreo;
@@ -52,6 +46,8 @@ private:
     std::string *multiplicacionBinariaSinSigno(std::string a, std::string b);
     BinYAcarreo sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C=0);
     bool denormal(Code operando);
+    std::string escalar(Binario operador);
+    float fraccionarBinaryToDec(std::string binario);
 
 };
 
