@@ -641,6 +641,8 @@ Alu::Code Alu::division(float operador1, float operador2)
     Code solucion;
     string oper1 = escalar(decToBinaryIEEE(operador1)), oper2 = escalar(decToBinaryIEEE(operador2));
     fraccionarBinaryToDec(oper1);
+
+
     return solucion;
 }
 
