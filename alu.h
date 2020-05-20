@@ -50,6 +50,7 @@ private:
     unsigned int binaryToDec(std::string bin);
     std::string *multiplicacionBinariaSinSigno(std::string a, std::string b);
     BinYAcarreo sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C=0);
+    bool denormal(Code operando);
 
 };
 

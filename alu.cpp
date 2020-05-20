@@ -208,6 +208,10 @@ unsigned int Alu::binaryToDec(string bin)
     return resultado;
 }
 
+bool Alu::denormal(Code operando)
+{
+   return operando.bitfield.expo-127 < -126;
+}
 
 Alu::BinYAcarreo Alu::sumaNumerosBinarios(std::string Operador1, std::string Operador2, int C) {
 
@@ -492,6 +496,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     }
 
+    //comprobacion desbordamientos
+
     int t;
     if(solucion.bitfield.expo - 127 > 127){
 
@@ -504,7 +510,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
              //Devolver underflow (NaN, ind...)
          }else{
-             for(int j = 0; j<t ; j++){
+             for(int j = 0; j<t ; j++)
+             {
 
                 for(int i=(int)PA[1].size()-1;i>0;i--)
                     PA[1][i] = PA[1][i-1];
@@ -519,7 +526,44 @@ Alu::Code Alu::producto(float operador1, float operador2)
          }
     }
 
+    //Operando denormales
+    if(denormal(operA) || denormal(operB))
+    {
+        if(solucion.bitfield.expo -127 < -126)
+        {
 
+        //Devolver underflow (NaN, ind...)
+        }else if(solucion.bitfield.expo -127 > -126)
+        {
+            int t1 = 0, t2= 0, t = 0;
+            string PA2= PA[0]+PA[1];
+            t1 = solucion.bitfield.expo - (-126);
+            while(strncmp(&PA2[t2], "0", 1) == 0 && t2<(int) PA2.size())
+                t2++;
+            if(t1 < t2)
+                t = t1;
+            else
+                t = t2;
+
+            solucion.bitfield.expo = solucion.bitfield.expo - t;
+            for(int j = 0; j<t ; j++)
+            {
+
+            for(int i=0;i<(int)PA[0].size()-1;i++)
+                PA[0][i] = PA[0][i+1];
+
+            PA[0][PA[0].size()-1] = PA[1][0];
+
+            for(int i=0;i<(int)PA[1].size()-1;i++)
+                PA[1][i] = PA[1][i+1];
+            PA[1][PA[1].size()-1] = 0x30;
+            }
+
+        }else
+        {
+            //resultado denormal
+        }
+    }
     return solucion;
 }
 
@@ -562,6 +606,10 @@ Alu::Code Alu::division(float operador1, float operador2)
     Code solucion;
     return solucion;
 }
+
+
+
+
 
 
 
