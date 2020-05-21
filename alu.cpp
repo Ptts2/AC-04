@@ -299,7 +299,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
     bool operandosIntercambiados = false, complementadoP = false;
     string mantisaA, mantisaB, mantisaSuma;
 
-    Code numSuma, operA, operB;
+    Code operA, operB;
     operA.numero=operador1;
     operB.numero=operador2;
 
@@ -612,6 +612,7 @@ string *Alu::multiplicacionBinariaSinSigno(string A, string B)
 
     for(int j=0; j<n;j++)
     {
+        C=0;
         if(strncmp(&A2[23], "1", 1) == 0){
             BinYAcarreo suma =  sumaNumerosBinarios(P, B);
             P = suma.binario;
