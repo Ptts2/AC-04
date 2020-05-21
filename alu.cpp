@@ -672,7 +672,7 @@ Alu::Code Alu::division(float operador1, float operador2)
     else if(Bf>= 1.25 && Bf<2)
         Bp=0.8;
 
-    if(operador1C.bitfield.sign==1 ^ operador2C.bitfield.sign==1)
+    if( (operador1C.bitfield.sign==1) ^ (operador2C.bitfield.sign==1))
         solucion.bitfield.sign=1;
     else
         solucion.bitfield.sign=0;
@@ -686,18 +686,19 @@ Alu::Code Alu::division(float operador1, float operador2)
        Y1 = producto(Y0,r).numero;
        X1 = producto(X0,r).numero;
 
-       if(X1 - X0 >= 0.0001){
+       if(suma(X1,-X0).numero < 0.0001){
            bucle = false;
        }else{
            X0 = X1;
            Y0 = Y1;
         }
+
     }while(bucle);
 
     Code division;
     division.numero = X1;
 
-    solucion.bitfield.expo = suma(suma(operador1C.bitfield.expo, -operador1C.bitfield.expo).numero, division.bitfield.expo).numero;
+    solucion.bitfield.expo = suma(suma((float)operador1C.bitfield.expo, -((float)operador2C.bitfield.expo)).numero,(float)division.bitfield.expo).numero;//
     solucion.bitfield.partFrac = division.bitfield.partFrac;
 
     return solucion;
