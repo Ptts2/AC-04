@@ -20,7 +20,7 @@ public:
             unsigned int sign : 1;
         }bitfield;
 
-        bool nan;
+        bool nan = false;
         float numero;
         unsigned int numerox;
     };

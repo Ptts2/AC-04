@@ -476,7 +476,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
     operA.numero=operador1;
     operB.numero=operador2;
 
-    if(operA.bitfield.sign==1 ^ operB.bitfield.sign==1)
+    if( (operA.bitfield.sign==1) ^ (operB.bitfield.sign==1) )
     {
         solucion.bitfield.sign=1;
     }else
@@ -490,6 +490,9 @@ Alu::Code Alu::producto(float operador1, float operador2)
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
 
     string *PA =  multiplicacionBinariaSinSigno(mantisaA, mantisaB); //24 bits P + 24 bits A
+
+    string pasdf = PA[0];
+    string sodfsd = PA[1];
 
     if(strncmp(&PA[0][0], "0", 1) == 0) {
 
@@ -611,9 +614,11 @@ string *Alu::multiplicacionBinariaSinSigno(string A, string B)
 
     for(int j=0; j<n;j++)
     {
-        if(strncmp(&A2[23], "1", 1) == 0)
-            P = sumaNumerosBinarios(P, B).binario;
-
+        if(strncmp(&A2[23], "1", 1) == 0){
+            BinYAcarreo suma =  sumaNumerosBinarios(P, B);
+            P = suma.binario;
+            C = suma.acarreo;
+           }
         for(int k=23;k>0;k--)
             A2[k] = A2[k-1];
 
