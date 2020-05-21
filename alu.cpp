@@ -639,9 +639,62 @@ Alu::Code Alu::division(float operador1, float operador2)
 {
 
     Code solucion;
-    string oper1 = escalar(decToBinaryIEEE(operador1)), oper2 = escalar(decToBinaryIEEE(operador2));
-    fraccionarBinaryToDec(oper1);
 
+    //Casos especiales
+
+    if(operador2==0){
+        solucion.nan = true;
+        return solucion;
+    }
+    /*if(operador1 == 0){
+        solucion.bitfield.expo=0;
+        solucion.bitfield.sign=0;
+        solucion.bitfield.partFrac=0;
+        return solucion;
+    }*/
+
+
+    string Aesc = escalar(decToBinaryIEEE(operador1)), Besc = escalar(decToBinaryIEEE(operador2));
+    Code operador1C, operador2C;
+
+    operador1C.numero = operador1;
+    operador2C.numero = operador2;
+
+    float X0, Y0, X1, Y1, r;
+    float Af = fraccionarBinaryToDec(Aesc), Bf = fraccionarBinaryToDec(Besc), Bp=0.00;
+
+    if(Bf>=1 && Bf<1.25)
+        Bp=1.00;
+    else if(Bf>= 1.25 && Bf<2)
+        Bp=0.8;
+
+    if(operador1C.bitfield.sign==1 ^ operador2C.bitfield.sign==1)
+        solucion.bitfield.sign=1;
+    else
+        solucion.bitfield.sign=0;
+
+    X0 = producto(Af, Bp).numero;
+    Y0 = producto(Bf, Bp).numero;
+    bool bucle = true;
+
+    do{
+       r = suma(2, -Y0).numero;
+       Y1 = producto(Y0,r).numero;
+       X1 = producto(X0,r).numero;
+
+       if(X1 - X0 >= 0.0001){
+           bucle = false;
+       }else{
+           X0 = X1;
+           Y0 = Y1;
+        }
+    }while(bucle);
+
+    Code division;
+    division.numero = X1;
+
+    solucion.bitfield.expo = suma(suma(operador1C.bitfield.expo, -operador1C.bitfield.expo).numero, division.bitfield.expo).numero;
+    solucion.bitfield.partFrac = division.bitfield.partFrac;
 
     return solucion;
 }
