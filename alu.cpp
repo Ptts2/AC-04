@@ -491,9 +491,6 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     string *PA =  multiplicacionBinariaSinSigno(mantisaA, mantisaB); //24 bits P + 24 bits A
 
-    string pasdf = PA[0];
-    string sodfsd = PA[1];
-
     if(strncmp(&PA[0][0], "0", 1) == 0) {
 
        for(int i=0;i<(int)PA[0].size()-1;i++)
@@ -561,7 +558,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
          }
     }
 
-    //Operando denormales
+    //Operandos denormales
     if(denormal(operA) || denormal(operB))
     {
         if(solucion.bitfield.expo -127 < -126)
@@ -602,6 +599,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
     string mantisaMultiplicacion = PA[0];
     mantisaMultiplicacion.erase(0,1);
     solucion.bitfield.partFrac = binaryToDec(mantisaMultiplicacion);
+    solucion.nan = false;
     return solucion;
 }
 
