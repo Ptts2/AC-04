@@ -593,6 +593,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
         }else
         {
+            solucion.nan = true;
+            return solucion;
             //resultado denormal
         }
     }
@@ -650,12 +652,12 @@ Alu::Code Alu::division(float operador1, float operador2)
         solucion.nan = true;
         return solucion;
     }
-    /*if(operador1 == 0){
+    if(operador1 == 0){
         solucion.bitfield.expo=0;
         solucion.bitfield.sign=0;
         solucion.bitfield.partFrac=0;
         return solucion;
-    }*/
+    }
 
 
     string Aesc = escalar(decToBinaryIEEE(operador1)), Besc = escalar(decToBinaryIEEE(operador2));
