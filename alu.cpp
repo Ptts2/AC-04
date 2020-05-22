@@ -485,16 +485,16 @@ Alu::Code Alu::producto(float operador1, float operador2)
     }
 
 
-    int expS = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
-    if(expS>255)
+    int expM = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
+    if(expM>255){
         solucion.bitfield.expo = 255;
-    else if(expS < 0){
+    }else if(expM < 0){
         solucion.bitfield.expo = 0;
         solucion.nan=true;
         return solucion;
+    }else{
+        solucion.bitfield.expo = expM;
     }
-    else
-        solucion.bitfield.expo = expS;
 
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
@@ -710,7 +710,17 @@ Alu::Code Alu::division(float operador1, float operador2)
     Code division;
     division.numero = X1;
 
-    solucion.bitfield.expo = suma(suma((float)operador1C.bitfield.expo, -((float)operador2C.bitfield.expo)).numero,(float)division.bitfield.expo).numero;//
+    int expD= suma(suma((float)operador1C.bitfield.expo, -((float)operador2C.bitfield.expo)).numero,(float)division.bitfield.expo).numero;
+    if(expD>255){
+        solucion.bitfield.expo = 255;
+    }else if(expD < 0){
+        solucion.bitfield.expo = 0;
+        solucion.nan=true;
+        return solucion;
+    }else{
+        solucion.bitfield.expo = expD;
+    }
+
     solucion.bitfield.partFrac = division.bitfield.partFrac;
 
     return solucion;
