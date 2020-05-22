@@ -660,7 +660,7 @@ Alu::Code Alu::division(float operador1, float operador2)
     }
 
 
-    string Aesc = escalar(decToBinaryIEEE(operador1)), Besc = escalar(decToBinaryIEEE(operador2));
+    string Aesc = escalar(decToBinaryIEEE(fabs(operador1))), Besc = escalar(decToBinaryIEEE(fabs(operador2)));
     Code operador1C, operador2C;
 
     operador1C.numero = operador1;
@@ -688,7 +688,7 @@ Alu::Code Alu::division(float operador1, float operador2)
        Y1 = producto(Y0,r).numero;
        X1 = producto(X0,r).numero;
 
-       if(suma(X1,-X0).numero < 0.0001){
+       if(fabs(suma(X1,-X0).numero) < 0.0001){
            bucle = false;
        }else{
            X0 = X1;
