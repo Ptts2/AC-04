@@ -312,10 +312,12 @@ Alu::Code Alu::suma(float operador1, float operador2)
         operandosIntercambiados = true;
     }
 
-
+    //Se iguala el exponente de la suma a A
     int exponenteSuma = operA.bitfield.expo;
     int d = operA.bitfield.expo - operB.bitfield.expo;
 
+    //Ver si los signos son diferentes, si lo son la mantisa se pone en complemento a 2
+    //Si no, queda igual
     if(operA.bitfield.sign != operB.bitfield.sign){
 
         Binario mantisa;
@@ -330,8 +332,10 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
 
+
     string P = mantisaB;
 
+    //Se asignan los bits de guarda, redondeo y sticky
     if(d>0 && d-1< (int)P.size() ){
         if((strncmp(&P[(n-1)-(d-1)], "1", 1) == 0))
             g = 1;
@@ -344,7 +348,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
             r = 0;
     }
 
-
+    //sticky (or)
    int i = 0;
    while(i<=d-2 && st == 0){
 
@@ -353,6 +357,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
         i++;
     }
 
+    //Se comparan los signos
     if(operA.bitfield.sign!=operB.bitfield.sign){
 
         for(i = 0; i<d; i++){
@@ -368,12 +373,14 @@ Alu::Code Alu::suma(float operador1, float operador2)
         }
     }
 
+    //Se suma la mantisa de A mas P
     int C = 0; //acarreo
 
     BinYAcarreo suma = sumaNumerosBinarios(mantisaA, P, C);
     P = suma.binario;
     C = suma.acarreo;
 
+    //Se miran las condiciones, si se cumplen P pasa a ser su complemento a 2
     if( (operA.bitfield.sign!=operB.bitfield.sign) && (strncmp(&P[0], "1", 1) == 0) && (C == 0) )
     {
 
@@ -383,7 +390,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
         complementadoP = true;
     }
 
-
+    //Si los signos son iguales y hay acarreo
     if( (operA.bitfield.sign==operB.bitfield.sign) && (C==1) )
     {
         st = (g||r||st);
@@ -426,6 +433,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     int C2 = 0; //Acarreo 2
 
+    //Redondear
     if( (r==1 && st==1) || (r==1 && st == 0 && (strncmp(&P[n-1], "1", 1) == 0)) )
     {
 
@@ -445,6 +453,7 @@ Alu::Code Alu::suma(float operador1, float operador2)
     mantisaSuma = P;
     int signoSuma;
 
+    //Calcular signo del resultado
     if( !operandosIntercambiados && complementadoP)
         signoSuma = operB.bitfield.sign;
     else
@@ -454,12 +463,13 @@ Alu::Code Alu::suma(float operador1, float operador2)
 
     solucion.bitfield.sign = signoSuma;
 
+    //Comprobacion de denormales
     if(exponenteSuma >255){
         solucion.bitfield.expo = 255;
         solucion.denormals.nan=false;
         solucion.denormals.inf = true;
         return solucion;
-    }else if(exponenteSuma < 0){
+    }else if(exponenteSuma <= 0){
         solucion.bitfield.expo = 0;
         solucion.denormals.inf = false;
         solucion.denormals.nan=true;
