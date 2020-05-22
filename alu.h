@@ -20,9 +20,13 @@ public:
             unsigned int sign : 1;
         }bitfield;
 
-        bool nan = false;
         float numero;
         unsigned int numerox;
+
+        struct{
+            bool nan;
+            bool inf;
+        }denormals;
     };
 
     struct BinYAcarreo{

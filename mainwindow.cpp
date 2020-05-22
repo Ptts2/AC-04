@@ -61,13 +61,20 @@ void MainWindow::on_boton_suma_pressed()
 
     Alu::Code resultado = this->alu.suma(op1, op2);
 
-    Alu::Binario op1bin =alu.decToBinaryNormal(op1);
-    Alu::Binario compA2 = alu.complementoA2(op1bin);
-
-    ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
-    ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
-    ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
-
+    if(resultado.denormals.nan)
+    {
+        ui->resultado_dec->setText( QString::fromStdString( "NaN" ));
+        ui->resultado_IEEE->setText(QString::fromStdString( "NaN" ));
+        ui->resultado_hex->setText( QString::fromStdString( "NaN" ));
+    }else if(resultado.denormals.inf){
+        resultado.bitfield.sign == 1? ui->resultado_dec->setText( QString::fromStdString( "-inf" )) :ui->resultado_dec->setText( QString::fromStdString( "inf" )) ;
+        ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+        ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+    }else{
+        ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
+        ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+        ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+    }
 }
 
 
@@ -80,13 +87,16 @@ void MainWindow::on_boton_producto_pressed()
 
     Alu::Code resultado = this->alu.producto(op1, op2);
 
-    if(resultado.nan)
+    if(resultado.denormals.nan)
     {
         ui->resultado_dec->setText( QString::fromStdString( "NaN" ));
         ui->resultado_IEEE->setText(QString::fromStdString( "NaN" ));
         ui->resultado_hex->setText( QString::fromStdString( "NaN" ));
-    }else
-    {
+    }else if(resultado.denormals.inf){
+        resultado.bitfield.sign == 1? ui->resultado_dec->setText( QString::fromStdString( "-inf" )) :ui->resultado_dec->setText( QString::fromStdString( "inf" )) ;
+        ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+        ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+    }else{
         ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
         ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
         ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
@@ -104,12 +114,17 @@ void MainWindow::on_boton_division_pressed()
 
     Alu::Code resultado = this->alu.division(op1, op2);
 
-    if(resultado.nan)
+    if(resultado.denormals.nan)
     {
         ui->resultado_dec->setText( QString::fromStdString( "NaN" ));
         ui->resultado_IEEE->setText(QString::fromStdString( "NaN" ));
-        ui->resultado_hex->setText( QString::fromStdString( "NaN" ));
-    }else
+        ui->resultado_hex->setText( QString::fromStdString( "NaN" ) );
+    }else if(resultado.denormals.inf){
+        resultado.bitfield.sign == 1? ui->resultado_dec->setText( QString::fromStdString( "-inf" )) :ui->resultado_dec->setText( QString::fromStdString( "inf" )) ;
+        ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));
+        ui->resultado_hex->setText( QString::fromStdString(getHexString(resultado.numerox)) );
+    }
+    else
     {
         ui->resultado_dec->setText( QString::fromStdString( to_string(resultado.numero) ));
         ui->resultado_IEEE->setText(QString::fromStdString(to_string( resultado.bitfield.sign ) + " " + alu.decToBinaryIEEE(resultado.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( resultado.bitfield.partFrac).parteEntera));

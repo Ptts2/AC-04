@@ -453,9 +453,25 @@ Alu::Code Alu::suma(float operador1, float operador2)
     mantisaSuma.erase(0,1);
 
     solucion.bitfield.sign = signoSuma;
-    solucion.bitfield.expo = exponenteSuma;
+
+    if(exponenteSuma >255){
+        solucion.bitfield.expo = 255;
+        solucion.denormals.nan=false;
+        solucion.denormals.inf = true;
+        return solucion;
+    }else if(exponenteSuma < 0){
+        solucion.bitfield.expo = 0;
+        solucion.denormals.inf = false;
+        solucion.denormals.nan=true;
+        return solucion;
+    }else{
+        solucion.bitfield.expo = exponenteSuma;
+    }
+
     solucion.bitfield.partFrac = binaryToDec(mantisaSuma);
 
+    solucion.denormals.nan = false;
+    solucion.denormals.inf = false;
     return solucion;
 }
 
@@ -488,9 +504,13 @@ Alu::Code Alu::producto(float operador1, float operador2)
     int expM = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
     if(expM>255){
         solucion.bitfield.expo = 255;
+        solucion.denormals.inf = true;
+        solucion.denormals.nan=false;
+        return solucion;
     }else if(expM < 0){
         solucion.bitfield.expo = 0;
-        solucion.nan=true;
+        solucion.denormals.nan=true;
+        solucion.denormals.inf = false;
         return solucion;
     }else{
         solucion.bitfield.expo = expM;
@@ -541,14 +561,16 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
     int t;
     if(solucion.bitfield.expo - 127 > 127){
-        solucion.nan = true;
+        solucion.denormals.nan = false;
+        solucion.denormals.inf = true;
         return solucion; //Devolver infinito
     }else if(solucion.bitfield.expo - 127 < -126){
 
          t = -126 - (solucion.bitfield.expo - 127);
 
          if(t>=24){
-             solucion.nan = true;
+             solucion.denormals.nan = true;
+             solucion.denormals.inf = false;
              return solucion; //Devolver underflow (NaN, ind...)
 
          }else{
@@ -573,7 +595,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
     {
         if(solucion.bitfield.expo -127 < -126)
         {
-            solucion.nan = true;
+            solucion.denormals.nan = true;
+            solucion.denormals.inf = false;
             return solucion; //Devolver underflow (NaN, ind...)
         }else if(solucion.bitfield.expo -127 > -126)
         {
@@ -603,7 +626,8 @@ Alu::Code Alu::producto(float operador1, float operador2)
 
         }else
         {
-            solucion.nan = true;
+            solucion.denormals.nan = true;
+            solucion.denormals.inf = false;
             return solucion;
             //resultado denormal
         }
@@ -611,7 +635,9 @@ Alu::Code Alu::producto(float operador1, float operador2)
     string mantisaMultiplicacion = PA[0];
     mantisaMultiplicacion.erase(0,1);
     solucion.bitfield.partFrac = binaryToDec(mantisaMultiplicacion);
-    solucion.nan = false;
+
+    solucion.denormals.nan = false;
+    solucion.denormals.inf = false;
     return solucion;
 }
 
@@ -659,7 +685,7 @@ Alu::Code Alu::division(float operador1, float operador2)
     //Casos especiales
 
     if(operador2==0){
-        solucion.nan = true;
+        solucion.denormals.nan = true;
         return solucion;
     }
     if(operador1 == 0){
@@ -710,12 +736,22 @@ Alu::Code Alu::division(float operador1, float operador2)
     Code division;
     division.numero = X1;
 
+    if(operador1C.bitfield.expo == 255 || operador1C.bitfield.expo == 255 ){
+        solucion.bitfield.expo = 255;
+        solucion.denormals.inf = true;
+        solucion.denormals.nan = false;
+        return solucion;
+    }
     int expD= suma(suma((float)operador1C.bitfield.expo, -((float)operador2C.bitfield.expo)).numero,(float)division.bitfield.expo).numero;
     if(expD>255){
         solucion.bitfield.expo = 255;
+        solucion.denormals.inf = true;
+        solucion.denormals.nan = false;
+        return solucion;
     }else if(expD < 0){
         solucion.bitfield.expo = 0;
-        solucion.nan=true;
+        solucion.denormals.inf = false;
+        solucion.denormals.nan=true;
         return solucion;
     }else{
         solucion.bitfield.expo = expD;
@@ -723,6 +759,8 @@ Alu::Code Alu::division(float operador1, float operador2)
 
     solucion.bitfield.partFrac = division.bitfield.partFrac;
 
+    solucion.denormals.nan = false;
+    solucion.denormals.inf = false;
     return solucion;
 }
 
