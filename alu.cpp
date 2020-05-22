@@ -489,6 +489,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
 {
 
     Code solucion;
+    //Si alguno de los operadores es 0, el resultado será 0
     if(operador1 == 0 || operador2 == 0)
     {
         solucion.bitfield.expo = 0;
@@ -502,6 +503,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
     operA.numero=operador1;
     operB.numero=operador2;
 
+    //XOR para el signo
     if( (operA.bitfield.sign==1) ^ (operB.bitfield.sign==1) )
     {
         solucion.bitfield.sign=1;
@@ -510,7 +512,7 @@ Alu::Code Alu::producto(float operador1, float operador2)
         solucion.bitfield.sign=0;
     }
 
-
+    //Se calcula el exponente
     int expM = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
     if(expM>255){
         solucion.bitfield.expo = 255;
@@ -529,8 +531,10 @@ Alu::Code Alu::producto(float operador1, float operador2)
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;
 
+    //Multiplicacion entera sin signo
     string *PA =  multiplicacionBinariaSinSigno(mantisaA, mantisaB); //24 bits P + 24 bits A
 
+    //Si Pn-1 es 0 se desplaza P,A un bit a la izquierda
     if(strncmp(&PA[0][0], "0", 1) == 0) {
 
        for(int i=0;i<(int)PA[0].size()-1;i++)
@@ -540,18 +544,20 @@ Alu::Code Alu::producto(float operador1, float operador2)
            PA[1][i] = PA[1][i+1];
         PA[1][PA[1].size()-1] = 0x30;
 
-      } else {
+      } else { //Si no, se suma 1 al exponente
         solucion.bitfield.expo = solucion.bitfield.expo + 1;
      }
 
+    //el bit de redondeo es igual a An-1
     if(strncmp(&PA[1][23], "0", 1) == 0)
         r = 0;
     else
         r = 1;
 
     int n = 0;
-    st = 0;
 
+    //Se calcula el sticky con un OR
+    st = 0;
     while(st == 0 && n<23){
 
         if(strncmp(&PA[1][n], "1", 1) == 0)
@@ -559,16 +565,14 @@ Alu::Code Alu::producto(float operador1, float operador2)
         n++;
     }
 
-
+    //Redondeo
     if( (r == 1 && st == 1)  || (r == 1 && st == 0 && (strncmp(&PA[0][23], "1", 1) == 0) ) ) {
 
          string uno ="000000000000000000000001";
          PA[0] = sumaNumerosBinarios(PA[0], uno).binario;
-
     }
 
     //comprobacion desbordamientos
-
     int t;
     if(solucion.bitfield.expo - 127 > 127){
         solucion.denormals.nan = false;
@@ -705,7 +709,6 @@ Alu::Code Alu::division(float operador1, float operador2)
         return solucion;
     }
 
-
     string Aesc = escalar(decToBinaryIEEE(fabs(operador1))), Besc = escalar(decToBinaryIEEE(fabs(operador2)));
     Code operador1C, operador2C;
 
@@ -729,6 +732,7 @@ Alu::Code Alu::division(float operador1, float operador2)
     Y0 = producto(Bf, Bp).numero;
     bool bucle = true;
 
+    //Se itera hasta que X1 sea 10^-4
     do{
        r = suma(2, -Y0).numero;
        Y1 = producto(Y0,r).numero;
@@ -746,7 +750,8 @@ Alu::Code Alu::division(float operador1, float operador2)
     Code division;
     division.numero = X1;
 
-    if(operador1C.bitfield.expo == 255 || operador1C.bitfield.expo == 255 ){
+    //Exponentes por si hay denormales
+    if(operador1C.bitfield.expo == 255 || operador2C.bitfield.expo == 255 ){
         solucion.bitfield.expo = 255;
         solucion.denormals.inf = true;
         solucion.denormals.nan = false;
