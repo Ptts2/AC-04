@@ -484,7 +484,17 @@ Alu::Code Alu::producto(float operador1, float operador2)
         solucion.bitfield.sign=0;
     }
 
-    solucion.bitfield.expo = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
+
+    int expS = (operA.bitfield.expo)+(operB.bitfield.expo)-127;
+    if(expS>255)
+        solucion.bitfield.expo = 255;
+    else if(expS < 0){
+        solucion.bitfield.expo = 0;
+        solucion.nan=true;
+        return solucion;
+    }
+    else
+        solucion.bitfield.expo = expS;
 
     string mantisaA = "1"+decToBinaryIEEE(operA.bitfield.partFrac).parteEntera;
     string mantisaB = "1"+decToBinaryIEEE(operB.bitfield.partFrac).parteEntera;

@@ -38,11 +38,23 @@ void MainWindow::setIEEEOperands(){
     Alu::Code op1IEEE = alu.fromDecToIEEE754(op1);
     Alu::Code op2IEEE = alu.fromDecToIEEE754(op2);
 
-    ui->op1_IEEE->setText(QString::fromStdString(to_string( op1IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op1IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op1IEEE.bitfield.partFrac).parteEntera));
-    ui->op2_IEEE->setText(QString::fromStdString(to_string( op2IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op2IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op2IEEE.bitfield.partFrac).parteEntera));
 
-    ui->op1_hex->setText( QString::fromStdString(getHexString(op1IEEE.numerox)) );
-    ui->op2_hex->setText( QString::fromStdString(getHexString(op2IEEE.numerox)) );
+    if(op1IEEE.bitfield.expo-127 > 127){
+        ui->op1_IEEE->setText(QString::fromStdString("inf"));
+        ui->op1_hex->setText(QString::fromStdString("inf"));
+    }else{
+        ui->op1_IEEE->setText(QString::fromStdString(to_string( op1IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op1IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op1IEEE.bitfield.partFrac).parteEntera));
+        ui->op1_hex->setText( QString::fromStdString(getHexString(op1IEEE.numerox)) );
+    }
+
+    if(op2IEEE.bitfield.expo-127 > 127){
+        ui->op2_IEEE->setText(QString::fromStdString("inf"));
+        ui->op2_hex->setText(QString::fromStdString("inf"));
+    }else{
+        ui->op2_IEEE->setText(QString::fromStdString(to_string( op2IEEE.bitfield.sign ) + " " + alu.decToBinaryIEEE(op2IEEE.bitfield.expo, 8).parteEntera + " " + alu.decToBinaryIEEE( op2IEEE.bitfield.partFrac).parteEntera));
+        ui->op2_hex->setText( QString::fromStdString(getHexString(op2IEEE.numerox)) );
+    }
+
 
 }
 void MainWindow::on_boton_suma_pressed()
